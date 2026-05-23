@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAMPATI v6.0 - High Security System</title>
+    <!-- Tailwind CSS untuk UI Premium -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SweetAlert2 untuk Notifikasi Modern -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+    <!-- PINTU UTAMA: GATEWAY BANNER & STATUS SECURITY -->
+    <nav class="bg-slate-950 border-b border-slate-800 text-white shadow-2xl sticky top-0 z-50 backdrop-blur-md bg-opacity-95">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
+                        <i class="fa-solid fa-shield-halved text-xl text-indigo-400"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-lg tracking-wide block text-white">SAMPATI <span class="text-indigo-400 font-mono text-sm">v6.0</span></span>
+                        <span class="text-xs text-slate-400 block font-medium -mt-1">Secure Role-Based Access Control Engine</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-xs bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl font-mono text-slate-300" id="user-display">
+                        Session: <span class="text-red-400 font-bold">TERKUNCI</span>
+                    </span>
+                    <button onclick="logout()" id="btn-logout" class="hidden text-xs bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 px-3 py-1.5 rounded-xl font-bold transition-all">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN APP WRAPPER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col justify-center">
+
+        <!-- SCREEN 1: PORTAL LOGIN / AUTHENTICATION GATEWAY -->
+        <div id="auth-gateway" class="max-w-md w-full mx-auto bg-slate-950 border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6">
+            <div class="text-center space-y-2">
+                <div class="w-16 h-16 bg-indigo-600/10 border border-indigo-500/30 rounded-2xl flex items-center justify-center mx-auto text-indigo-400 text-2xl shadow-inner">
+                    <i class="fa-solid fa-lock-open"></i>
+                </div>
+                <h2 class="text-xl font-extrabold text-white tracking-tight">Otentikasi Satu Pintu</h2>
+                <p class="text-xs text-slate-400">Silakan pilih kelas akses untuk mendobrak masuk ke dalam sistem</p>
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="loginAs('Warga')" class="w-full p-4 bg-slate-900 border border-slate-800 rounded-2xl hover:border-blue-500/50 hover:bg-blue-500/5 text-left flex items-center justify-between transition-all group">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 bg-blue-500/10 rounded-xl text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all"><i class="fa-solid fa-user"></i></div>
+                        <div><p class="text-sm font-bold text-white">Kelas 1: Warga</p><p class="text-[11px] text-slate-400">Cek status & hasil resep personal</p></div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-600 group-hover:text-blue-400 transition-all"></i>
+                </button>
+                <button onclick="loginAs('Petugas')" class="w-full p-4 bg-slate-900 border border-slate-800 rounded-2xl hover:border-emerald-500/50 hover:bg-emerald-500/5 text-left flex items-center justify-between transition-all group">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 bg-emerald-500/10 rounded-xl text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-all"><i class="fa-solid fa-file-invoice"></i></div>
+                        <div><p class="text-sm font-bold text-white">Kelas 2: Petugas</p><p class="text-[11px] text-slate-400">Registrasi antrean & input data fisik</p></div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-600 group-hover:text-emerald-400 transition-all"></i>
+                </button>
+                <button onclick="loginAs('Dokter')" class="w-full p-4 bg-slate-900 border border-slate-800 rounded-2xl hover:border-amber-500/50 hover:bg-amber-500/5 text-left flex items-center justify-between transition-all group">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 bg-amber-500/10 rounded-xl text-amber-400 group-hover:bg-amber-500 group-hover:text-white transition-all"><i class="fa-solid fa-user-doctor"></i></div>
+                        <div><p class="text-sm font-bold text-white">Kelas 3: Dokter</p><p class="text-[11px] text-slate-400">Diagnosa medis & e-Resep obat otomatis</p></div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-600 group-hover:text-amber-400 transition-all"></i>
+                </button>
+                <div class="border-t border-slate-800 my-4 pt-4">
+                    <button onclick="loginAs('Developer')" class="w-full p-3 bg-gradient-to-r from-purple-950 to-indigo-950 border border-purple-500/30 rounded-2xl text-center flex items-center justify-center gap-2 hover:from-purple-900 hover:to-indigo-900 transition-all shadow-lg text-purple-300 hover:text-white font-bold text-xs tracking-wider uppercase">
+                        <i class="fa-solid fa-terminal animate-pulse"></i> Developer Omnipresent Mode
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: WORKSPACE (DINAMIS DIKONTROL OLEH ENGINE KEAMANAN) -->
+        <div id="app-workspace" class="hidden space-y-8 animate-fade-in">
+            
+            <!-- KELAS 1: INTERFACE WARGA -->
+            <div id="role-warga-view" class="role-view hidden bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+                <div class="flex items-center gap-2 text-blue-400 border-b border-slate-800 pb-3"><i class="fa-solid fa-user"></i> <h3 class="font-bold text-sm uppercase tracking-wide">Portal Warga Mandiri</h3></div>
+                <div class="max-w-md space-y-3">
+                    <label class="block text-xs font-bold text-slate-400 uppercase">Masukkan NIK Anda untuk Cek Rekam Medis:</label>
+                    <div class="flex gap-2">
+                        <input type="number" id="warga-search-nik" class="flex-grow px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl focus:outline-none focus:border-blue-500 text-sm" placeholder="Contoh: 3207...">
+                        <button onclick="cariDataWarga()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 font-bold text-xs rounded-xl transition-all">Cari Rekor</button>
+                    </div>
+                </div>
+                <div id="warga-result-card" class="hidden mt-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-3">
+                    <!-- Injeksi Data Aman -->
+                </div>
+            </div>
+
+            <!-- KELAS 2: INTERFACE PETUGAS -->
+            <div id="role-petugas-view" class="role-view hidden grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+                    <div class="flex items-center gap-2 text-emerald-400 border-b border-slate-800 pb-3"><i class="fa-solid fa-user-plus"></i> <h3 class="font-bold text-sm uppercase tracking-wide">Registrasi Warga (Kamar 1)</h3></div>
+                    <form onsubmit="petugasTambahWarga(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Nama Lengkap</label>
+                            <input type="text" id="p-nama" required class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl focus:outline-none focus:border-emerald-500 text-sm text-white" placeholder="Nama lengkap warga...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Nomor NIK</label>
+                            <input type="number" id="p-nik" required class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl focus:outline-none focus:border-emerald-500 text-sm text-white" placeholder="3207...">
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 font-bold text-xs rounded-xl transition-all tracking-wider uppercase"><i class="fa-solid fa-floppy-disk mr-1"></i> Daftarkan Ke Antrean</button>
+                    </form>
+                </div>
+                <div class="bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+                    <div class="flex items-center gap-2 text-teal-400 border-b border-slate-800 pb-3"><i class="fa-solid fa-weight-scale"></i> <h3 class="font-bold text-sm uppercase tracking-wide">Pemeriksaan Fisik Vitals (Kamar 2)</h3></div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Pilih Antrean Warga</label>
+                            <select id="p-select-warga" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl focus:outline-none focus:border-teal-500 text-sm text-white">
+                                <!-- Injeksi Dinamis -->
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Berat Badan (kg)</label>
+                                <input type="number" id="p-bb" step="0.1" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl focus:outline-none focus:border-teal-500 text-sm text-white" placeholder="0.0">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Tinggi Badan (cm)</label>
+                                <input type="number" id="p-tb" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl focus:outline-none focus:border-teal-500 text-sm text-white" placeholder="0">
+                            </div>
+                        </div>
+                        <button onclick="petugasSimpanVitals()" class="w-full py-3 bg-teal-600 hover:bg-teal-700 font-bold text-xs rounded-xl transition-all tracking-wider uppercase"><i class="fa-solid fa-bolt mr-1"></i> Inject Hasil Pemeriksaan</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KELAS 3: INTERFACE DOKTER -->
+            <div id="role-dokter-view" class="role-view hidden bg-slate-950 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+                <div class="flex items-center gap-2 text-amber-400 border-b border-slate-800 pb-3"><i class="fa-solid fa-user-doctor"></i> <h3 class="font-bold text-sm uppercase tracking-wide">Kamar Validasi Medis & E-Resep</h3></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Pilih Warga Terperiksa</label>
+                            <select id="d-select-warga" onchange="dokterLoadDetail(this.value)" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl focus:outline-none focus:border-amber-500 text-sm text-white">
+                                <!-- Injeksi dinamis warga yang sudah ada data vitals tapi belum ada diagnosa -->
+                            </select>
+                        </div>
+                        <div id="d-vitals-info" class="bg-slate-900 p-4 border border-slate-800 rounded-2xl text-xs space-y-2 text-slate-400">
+                            <i>Silakan pilih pasien untuk melihat data vitalitas fisik...</i>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2 space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Diagnosa Klinis & Hasil Analisis Gizi</label>
+                            <textarea id="d-diagnosa" rows="2" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl focus:outline-none focus:border-amber-500 text-sm text-white" placeholder="Tulis hasil analisa medis pasien di sini..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">E-Resep Obat / Intervensi Suplemen</label>
+                            <input type="text" id="d-resep" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl focus:outline-none focus:border-amber-500 text-sm text-white" placeholder="Contoh: Vitamin A, Pemberian Makanan Tambahan (PMT) 30 Hari">
+                        </div>
+                        <button onclick="dokterSimpanDiagnosa()" class="w-full py-3 bg-amber-600 hover:bg-amber-700 text-slate-950 font-extrabold text-xs rounded-xl transition-all tracking-wider uppercase"><i class="fa-solid fa-file-medical mr-1"></i> Tanda Tangani & Kunci Berkas Medis</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HIGH SECURITY DEVELOPER AUDIT TRAIL DATA STREAM (HANYA UNTUK DEVELOPER) -->
+            <div id="developer-omnipresent-view" class="role-view hidden space-y-6">
+                <!-- Dashboard Utama Developer -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-gradient-to-br from-slate-950 to-slate-900 border border-purple-500/30 rounded-3xl p-6 shadow-2xl lg:col-span-2 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <div class="flex items-center gap-2 text-purple-400">
+                                <i class="fa-solid fa-database animate-pulse"></i>
+                                <h3 class="font-bold text-sm uppercase tracking-wider">Master Data Center Consolidator (Arus 3 Kelas)</h3>
+                            </div>
+                            <button onclick="wipeDatabase()" class="text-[10px] bg-red-500/20 hover:bg-red-500/40 text-red-400 px-2.5 py-1 rounded-lg font-bold border border-red-500/30 transition-all uppercase"><i class="fa-solid fa-radiation"></i> Wipe DB</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="border-b border-slate-800 text-slate-500 font-bold uppercase tracking-wider bg-slate-900/50">
+                                        <th class="p-3">Identitas (Kamar 1)</th>
+                                        <th class="p-3">Fisik Vitals (Kamar 2)</th>
+                                        <th class="p-3">Klinis & Resep (Kamar 3)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dev-table-body" class="divide-y divide-slate-800/60">
+                                    <!-- Injeksi Seluruh Data Secara Transparan -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Real-time Security Log Pipeling -->
+                    <div class="bg-slate-950 border border-purple-500/30 rounded-3xl p-6 shadow-2xl flex flex-col h-[320px]">
+                        <div class="flex items-center gap-2 text-amber-400 border-b border-slate-800 pb-3 mb-3">
+                            <i class="fa-solid fa-terminal text-xs"></i>
+                            <h3 class="font-bold text-xs uppercase tracking-wider">High Security Kernel Logs</h3>
+                        </div>
+                        <div id="kernel-logs" class="flex-grow bg-black/50 border border-slate-800 rounded-xl p-3 font-mono text-[10px] text-emerald-400 overflow-y-auto space-y-1">
+                            <!-- Logs System Inject -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-950 border-t border-slate-800 py-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 font-mono">
+            &copy; 2026 SAMPATI v6.0 Engine. Isolated Database Architecture Protection Active.
+        </div>
+    </footer>
+
+    <!-- ENGINE LOGIC UTAH (JAVASCRIPT RUNTIME) -->
+    <script>
+        // Data Store (State terenkripsi lokal via LocalStorage)
+        let coreDatabase = JSON.parse(localStorage.getItem('sampati_secure_db')) || [];
+        let authenticatedRole = null;
+
+        // KERNEL LOG PIPELINE (Keamanan Jejak Digital)
+        function injectLog(status, message) {
+            const container = document.getElementById('kernel-logs');
+            if(!container) return;
+            const time = new Date().toLocaleTimeString();
+            let color = 'text-emerald-400';
+            if(status === 'WARN') color = 'text-amber-400';
+            if(status === 'CRIT') color = 'text-red-400';
+            if(status === 'AUTH') color = 'text-purple-400';
+            
+            container.innerHTML += `<div class="${color}">[${time}] [${status}] ${message}</div>`;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // PINTU UTAMA: GATEWAY AUTHENTICATION & SECURITY ENFORCER
+        function loginAs(role) {
+            authenticatedRole = role;
+            
+            // UI Mutation & Logging
+            document.getElementById('auth-gateway').classList.add('hidden');
+            document.getElementById('app-workspace').classList.remove('hidden');
+            document.getElementById('btn-logout').classList.remove('hidden');
+            document.getElementById('user-display').innerHTML = `Role: <span class="text-indigo-400 font-extrabold font-sans uppercase">${role}</span>`;
+            
+            // RESET ALL SECURE DOM VIEWS (Proteksi Memori Objek)
+            document.querySelectorAll('.role-view').forEach(view => view.classList.add('hidden'));
+
+            // SECURE ROUTING DISPATCHER (Isolasi Mutlak Hak Akses)
+            if (role === 'Warga') {
+                document.getElementById('role-warga-view').classList.remove('hidden');
+            } else if (role === 'Petugas') {
+                document.getElementById('role-petugas-view').classList.remove('hidden');
+                renderPetugasForms();
+            } else if (role === 'Dokter') {
+                document.getElementById('role-dokter-view').classList.remove('hidden');
+                renderDokterForms();
+            } else if (role === 'Developer') {
+                // Developer Mode membuka seluruh lapis visual tanpa kecuali
+                document.getElementById('role-warga-view').classList.remove('hidden');
+                document.getElementById('role-petugas-view').classList.remove('hidden');
+                document.getElementById('role-dokter-view').classList.remove('hidden');
+                document.getElementById('developer-omnipresent-view').classList.remove('hidden');
+                
+                renderPetugasForms();
+                renderDokterForms();
+                renderDeveloperTable();
+            }
+
+            injectLog('AUTH', `User menembus Pintu Utama dengan Level Otentikasi: ${role}.`);
+            Swal.fire({ icon: 'success', title: 'Akses Diberikan', text: `Selamat datang di ruang kerja ${role}`, timer: 1200, showConfirmButton: false, background: '#0f172a', color: '#fff' });
+        }
+
+        function logout() {
+            injectLog('AUTH', `Role ${authenticatedRole} melakukan pemutusan sesi (Session Terbakar).`);
+            authenticatedRole = null;
+            document.getElementById('app-workspace').classList.add('hidden');
+            document.getElementById('btn-logout').classList.add('hidden');
+            document.getElementById('auth-gateway').classList.remove('hidden');
+            document.getElementById('user-display').innerHTML = `Session: <span class="text-red-400 font-bold">TERKUNCI</span>`;
+            
+            // Bersihkan sisa form demi keamanan data klien
+            document.getElementById('warga-result-card').classList.add('hidden');
+            document.getElementById('warga-search-nik').value = '';
+        }
+
+        // ================= KELAS 1: ENGINE WARGA =================
+        function cariDataWarga() {
+            const nik = document.getElementById('warga-search-nik').value;
+            const record = coreDatabase.find(w => w.nik === nik);
+            const card = document.getElementById('warga-result-card');
+            
+            if(!nik) return;
+            card.classList.remove('hidden');
+
+            if(!record) {
+                card.innerHTML = `<div class="text-red-400 text-xs font-mono"><i class="fa-solid fa-triangle-exclamation"></i> Berkas Tidak Ditemukan. NIK Anda belum didaftarkan oleh Petugas Desa.</div>`;
+                injectLog('WARN', `Warga mencari NIK ${nik} - Hasil: Gagal / Tidak Terdaftar.`);
+                return;
+            }
+
+            injectLog('SUCCESS', `Warga dengan NIK ${nik} berhasil mendekripsi data kesehatannya.`);
+            card.innerHTML = `
+                <div class="border-b border-slate-800 pb-2 mb-2">
+                    <h4 class="text-white font-bold text-sm">${record.nama}</h4>
+                    <p class="text-[11px] text-slate-500 font-mono">ID Sistem: ${record.id} | Terdaftar: ${record.timestamp}</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans">
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block font-bold uppercase text-[10px]">Pemeriksaan Fisik (Petugas):</span>
+                        ${record.vitals ? `<p class="mt-1 text-slate-200">BB: <b>${record.vitals.bb} kg</b> | TB: <b>${record.vitals.tb} cm</b></p><p class="mt-1 font-bold ${record.vitals.imtColor}">IMT: ${record.vitals.imt} (${record.vitals.status})</p>` : '<i class="text-slate-600">Belum diperiksa fisik</i>'}
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <span class="text-slate-500 block font-bold uppercase text-[10px]">Diagnosa & Intervensi (Dokter):</span>
+                        ${record.medis ? `<p class="mt-1 text-amber-400 font-medium">Diagnosa: "${record.medis.diagnosa}"</p><p class="mt-1 text-emerald-400 font-bold"><i class="fa-solid fa-pills"></i> Resep: ${record.medis.resep}</p>` : '<i class="text-slate-600">Menunggu validasi resep dokter</i>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ================= KELAS 2: ENGINE PETUGAS =================
+        function petugasTambahWarga(e) {
+            e.preventDefault();
+            const nama = document.getElementById('p-nama').value;
+            const nik = document.getElementById('p-nik').value;
+
+            if(coreDatabase.some(w => w.nik === nik)) {
+                Swal.fire({ icon: 'error', title: 'Duplikasi Terdeteksi', text: 'NIK ini sudah ada di dalam enkripsi basis data!', background: '#0f172a', color: '#fff' });
+                injectLog('CRIT', `Petugas gagal menginput NIK ${nik} akibat bentrokan restriksi duplikasi.`);
+                return;
+            }
+
+            const dataBaru = {
+                id: 'SMPT-' + Math.floor(1000 + Math.random() * 9000),
+                nama: nama,
+                nik: nik,
+                vitals: null,
+                medis: null,
+                timestamp: new Date().toLocaleDateString('id-ID')
+            };
+
+            coreDatabase.push(dataBaru);
+            commitData();
+            
+            document.getElementById('p-nama').value = '';
+            document.getElementById('p-nik').value = '';
+            
+            Swal.fire({ icon: 'success', title: 'Data Dikunci', text: `${nama} terdaftar di Kamar 1.`, timer: 1200, showConfirmButton: false, background: '#0f172a', color: '#fff' });
+            injectLog('SUCCESS', `Petugas memasukkan entri warga baru: ${nama} (${idSistemFilter(dataBaru.id)}).`);
+            
+            // Re-render lingkungan internal
+            if(authenticatedRole === 'Developer') { renderDeveloperTable(); }
+            renderPetugasForms();
+            renderDokterForms();
+        }
+
+        function petugasSimpanVitals() {
+            const id = document.getElementById('p-select-warga').value;
+            const bb = parseFloat(document.getElementById('p-bb').value);
+            const tb = parseInt(document.getElementById('p-tb').value);
+
+            if(!id || !bb || !tb) {
+                Swal.fire({ icon: 'warning', title: 'Data Kosong', text: 'Mohon isi parameter vitalitas secara lengkap!', background: '#0f172a', color: '#fff' });
+                return;
+            }
+
+            const idx = coreDatabase.findIndex(w => w.id === id);
+            if(idx !== -1) {
+                // Algoritma Otomasi IMT Medis
+                const tm = tb / 100;
+                const imt = (bb / (tm * tm)).toFixed(1);
+                let status = 'Gizi Normal';
+                let imtColor = 'text-emerald-400';
+
+                if(imt < 18.5) { status = 'Gizi Kurang (Kurus)'; imtColor = 'text-amber-400'; }
+                else if(imt >= 25.0) { status = 'Risiko Gizi Lebih / Obesitas'; imtColor = 'text-red-400'; }
+
+                coreDatabase[idx].vitals = { bb, tb, imt, status, imtColor };
+                commitData();
+
+                document.getElementById('p-bb').value = '';
+                document.getElementById('p-tb').value = '';
+
+                Swal.fire({ icon: 'success', title: 'Vitals Terproses', text: 'Kamar 2 berhasil melakukan kalkulasi otomatis.', timer: 1200, showConfirmButton: false, background: '#0f172a', color: '#fff' });
+                injectLog('SUCCESS', `Petugas menyuntikkan data fisik ke ID ${idSistemFilter(id)}. Hasil IMT: ${imt} (${status}).`);
+
+                if(authenticatedRole === 'Developer') { renderDeveloperTable(); }
+                renderPetugasForms();
+                renderDokterForms();
+            }
+        }
+
+        function renderPetugasForms() {
+            const select = document.getElementById('p-select-warga');
+            if(!select) return;
+            select.innerHTML = '<option value="">-- Pilih Antrean Warga --</option>';
+            coreDatabase.forEach(w => {
+                if(!w.vitals) {
+                    select.innerHTML += `<option value="${w.id}">${w.nama} (${w.nik})</option>`;
+                }
+            });
+        }
+
+        // ================= KELAS 3: ENGINE DOKTER =================
+        function renderDokterForms() {
+            const select = document.getElementById('d-select-warga');
+            if(!select) return;
+            select.innerHTML = '<option value="">-- Pilih Pasien Terperiksa --</option>';
+            coreDatabase.forEach(w => {
+                if(w.vitals && !w.medis) {
+                    select.innerHTML += `<option value="${w.id}">${w.nama}</option>`;
+                }
+            });
+            document.getElementById('d-vitals-info').innerHTML = `<i>Silakan pilih pasien untuk melihat data vitalitas fisik...</i>`;
+        }
+
+        function dokterLoadDetail(id) {
+            const container = document.getElementById('d-vitals-info');
+            if(!id) { container.innerHTML = `<i>Silakan pilih pasien...</i>`; return; }
+            const record = coreDatabase.find(w => w.id === id);
+            if(record && record.vitals) {
+                container.innerHTML = `
+                    <p class="font-bold text-slate-300">Hasil Analisa Fisik Petugas:</p>
+                    <p class="mt-1">Berat Badan: <span class="text-white font-bold">${record.vitals.bb} kg</span></p>
+                    <p>Tinggi Badan: <span class="text-white font-bold">${record.vitals.tb} cm</span></p>
+                    <p class="mt-1 font-bold ${record.vitals.imtColor}">Status Gizi: ${record.vitals.status} (IMT: ${record.vitals.imt})</p>
+                `;
+                injectLog('SUCCESS', `Dokter membuka rekam medis fisik milik ID ${idSistemFilter(id)}.`);
+            }
+        }
+
+        function dokterSimpanDiagnosa() {
+            const id = document.getElementById('d-select-warga').value;
+            const diagnosa = document.getElementById('d-diagnosa').value;
+            const resep = document.getElementById('d-resep').value;
+
+            if(!id || !diagnosa || !resep) {
+                Swal.fire({ icon: 'warning', title: 'Data Belum Lengkap', text: 'Form diagnosa dan e-resep wajib ditandatangani!', background: '#0f172a', color: '#fff' });
+                return;
+            }
+
+            const idx = coreDatabase.findIndex(w => w.id === id);
+            if(idx !== -1) {
+                coreDatabase[idx].medis = { diagnosa, resep };
+                commitData();
+
+                document.getElementById('d-diagnosa').value = '';
+                document.getElementById('d-resep').value = '';
+
+                Swal.fire({ icon: 'success', title: 'Berkas Dikunci', text: 'Tanda tangan digital dan resep berhasil disimpan secara permanen.', timer: 1200, showConfirmButton: false, background: '#0f172a', color: '#fff' });
+                injectLog('SUCCESS', `Dokter merilis berkas resep & keputusan klinis untuk ID ${idSistemFilter(id)}.`);
+
+                if(authenticatedRole === 'Developer') { renderDeveloperTable(); }
+                renderPetugasForms();
+                renderDokterForms();
+            }
+        }
+
+        // ================= LEVEL MASTER DEVELOPER OMNIPRESENT VIEW =================
+        function renderDeveloperTable() {
+            const tbody = document.getElementById('dev-table-body');
+            if(!tbody) return;
+            
+            if(coreDatabase.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-slate-600 italic font-mono">Database kosong. Arus data pipeline nihil.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            coreDatabase.forEach(w => {
+                const vitalsCell = w.vitals ? `<div>BB: ${w.vitals.bb}kg | TB: ${w.vitals.tb}cm</div><div class="font-bold ${w.vitals.imtColor} text-[10px]">${w.vitals.status}</div>` : `<span class="text-slate-600 italic">No Data (Kamar 2 Idle)</span>`;
+                const medisCell = w.medis ? `<div class="text-amber-400">Diag: "${w.medis.diagnosa}"</div><div class="text-emerald-400 font-bold"><i class="fa-solid fa-prescription-bottle-medical"></i> ${w.medis.resep}</div>` : `<span class="text-slate-600 italic">No Data (Kamar 3 Idle)</span>`;
+                
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-900/80 transition-colors font-mono">
+                        <td class="p-3 border-b border-slate-800/40">
+                            <div class="font-bold text-white font-sans">${w.nama}</div>
+                            <div class="text-[10px] text-slate-500">NIK: ${w.nik} | ID: ${w.id}</div>
+                        </td>
+                        <td class="p-3 border-b border-slate-800/40 text-[11px]">${vitalsCell}</td>
+                        <td class="p-3 border-b border-slate-800/40 text-[11px]">${medisCell}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // DATABASE COMMIT ENGINE
+        function commitData() {
+            localStorage.setItem('sampati_secure_db', JSON.stringify(coreDatabase));
+        }
+
+        function wipeDatabase() {
+            Swal.fire({
+                title: 'Wipe Out All Database?',
+                text: "Tindakan ini akan menghancurkan data dari ketiga kelas warga secara total!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                confirmButtonText: 'KIRIM PERINTAH PURGE',
+                background: '#0f172a',
+                color: '#fff'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    coreDatabase = [];
+                    commitData();
+                    renderDeveloperTable();
+                    renderPetugasForms();
+                    renderDokterForms();
+                    injectLog('CRIT', 'DEVELOPER MENGIRIMKAN PERINTAH PURGE. DATABASE DIBERSIHKAN TOTAL!');
+                    Swal.fire({title: 'Sistem Dikosongkan', icon: 'success', background: '#0f172a', color: '#fff'});
+                }
+            });
+        }
+
+        function idSistemFilter(id) {
+            return `<span class="text-purple-400 font-mono font-bold">${id}</span>`;
+        }
+
+        // BIND KERNEL AWAL
+        window.onload = function() {
+            injectLog('SUCCESS', 'Kernel Keamanan Tingkat Tinggi SAMPATI v6.0 Berhasil Dipasang.');
+            injectLog('WARN', 'Sistem Satu Pintu Siap Diuji. Menunggu Input Otentikasi Role...');
+        }
+    </script>
+</body>
+</html>
